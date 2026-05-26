@@ -1,5 +1,54 @@
 {% extends "base.html" %}
-
+{% import "macros/render_pub_list.html" as pub_macros %}
 {% block content %}
+<div style="margin-top:10px"></div>
   {{page.content | safe}}
+
+<section class="featured-publications">
+    <h2>Featured publications</h2>
+    {% set data = load_data(path="data/publications.json") %}
+    {% set sorted_publications = data | sort(attribute="order") | reverse %}
+
+    {% set featured_pubs = [] %}
+    {% for pub in sorted_publications %}
+      {% if pub.hidden and pub.hidden != "true" %}{% continue %}{% endif %}
+      {% if pub.featured and pub.featured == "yes" %}
+        {% set_global featured_pubs = featured_pubs | concat(with=pub) %}
+      {% endif %}
+    {% endfor %}
+
+    <div class="featured-list-wrapper">
+      {{ pub_macros::render_list(items=featured_pubs) }}
+    </div>
+
+  </section>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('click', (e) => {
+      // Open overlay
+      const openBtn = e.target.closest('.toggle-overlay');
+      if (openBtn) {
+        e.stopPropagation();
+        const targetId = openBtn.getAttribute('data-target');
+        const overlay = document.getElementById(targetId);
+        if (overlay) overlay.classList.remove('hidden');
+        return;
+      }
+
+      // Close button
+      const closeBtn = e.target.closest('.close-overlay');
+      if (closeBtn) {
+        e.stopPropagation();
+        closeBtn.closest('.pub-overlay').classList.add('hidden');
+        return;
+      }
+
+      // Backdrop click
+      const overlayBackdrop = e.target.closest('.pub-overlay');
+      if (overlayBackdrop && e.target === overlayBackdrop) {
+        overlayBackdrop.classList.add('hidden');
+      }
+    });
+  });
+</script>
 {% endblock content %}

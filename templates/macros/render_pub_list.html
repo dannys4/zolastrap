@@ -41,9 +41,10 @@
       -->{% endif %}<!--
       -->{% if pub.year %}<!--
         --> ({{ pub.year }})<!--
+        -->{% if not pub.pages %}.{% endif %}<!--
       -->{% endif %}<!--
       -->{% if pub.pages %}<!--
-        -->, pp. {{ pub.pages }}<!--
+        -->, pp. {{ pub.pages }}.<!--
       -->{% endif %}
       </p>
     </div>
