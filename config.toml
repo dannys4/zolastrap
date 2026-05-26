@@ -33,7 +33,7 @@ tags = 'Posts by Topics'
 
 links = [
 	{title = 'Articles', url = 'articles'},
-  {title = 'Authors', url = 'authors'},
+  {title = 'People', url = 'authors'},
 	{title = 'About', url = 'about'},
 	{title = 'Topics', url = 'tags'},
 	{title = 'Github', url = 'https://github.com/marcodpt/zolastrap'},

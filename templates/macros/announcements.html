@@ -9,7 +9,7 @@
     <div class="row">
     {% endif%}
       <div class="col-md">
-        {{post::render(page=page, type=type)}}
+        {{announcement::render(page=page, type=type)}}
       </div>
     {% endfor %}
     </div>
@@ -17,7 +17,7 @@
     {{carousel::render(pages=pages)}}
   {% else %}
     {% for page in pages %}
-      {{post::render(page=page, type=type)}}
+      {{announcement::render(page=page, type=type)}}
     {% endfor %}
   {% endif %}
 {% endmacro %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% import "macros/authorbox.html" as authorbox %}
-{% import "macros/post.html" as post %}
+{% import "macros/personbox.html" as personbox %}
+{% import "macros/announcement.html" as announcement %}
 {% import "macros/paginator.html" as paginator %}
 
 {% block title %}
@@ -8,9 +8,9 @@
 {% endblock %}
 
 {% block content %}
-  {{authorbox::render(author_slug=term.name)}}
+  {{personbox::render(author_slug=term.name)}}
 	{% for page in paginator.pages %}
-    {{post::render(page=page)}}
+    {{announcement::render(page=page)}}
 	{% endfor %}
   {{paginator::render(paginator=paginator)}}
 {% endblock content %}

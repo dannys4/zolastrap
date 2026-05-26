@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% import "macros/post.html" as post %}
-{% import "macros/posts.html" as posts %}
+{% import "macros/announcement.html" as announcement %}
+{% import "macros/announcements.html" as announcements %}
 {% import "macros/paginator.html" as paginator %}
 {% import "macros/header.html" as header %}
 
@@ -20,13 +20,13 @@
               {% for row in item.rows %}
                 {% set end = start + row %}
                 {% set pages = articles.pages | slice(start=start, end=end) %}
-                {{posts::render(pages=pages, type=type, row=row)}}
+                {{announcements::render(pages=pages, type=type, row=row)}}
                 {% set_global start = end %}
               {% endfor %}
             {% else %}
               {% set pages = articles.pages | slice(start=item.start, end=item.end) %}
               {% set row = item.row | default(value=0) %}
-              {{posts::render(pages=pages, type=type, row=row)}}
+              {{announcements::render(pages=pages, type=type, row=row)}}
             {% endif %}
           {% else %}
             {% for i in item.items %}
@@ -72,7 +72,7 @@
     <div class="content px-3">{{section.content | safe}}</div>
   {% endif %}
 	{% for page in paginator.pages %}
-    {{post::render(page=page)}}
+    {{announcement::render(page=page)}}
 	{% endfor %}
   {{paginator::render(paginator=paginator)}}
   {% if section.extra.tags %}
@@ -82,7 +82,7 @@
       <a
         class="text-decoration-none text-reset"
         href="{{item.permalink}}"
-      >{{item.name}}</a> | 
+      >{{item.name}}</a> |
     {% endfor %}
   {% endif %}
 {% endblock %}
