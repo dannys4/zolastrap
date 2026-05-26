@@ -3,15 +3,17 @@
 {% block content %}
 <main class="publications-container">
   {% set data = load_data(path="data/publications.json") %}
-
   {% set sorted_publications = data | sort(attribute="order") | reverse %}
 
   <ul class="pub-list">
+    {% set visible_publications = [] %}
     {% for pub in sorted_publications %}
-      {% if pub.hidden and pub.hidden == "true" %}
-        {% continue %}
+      {% if not pub.hidden or pub.hidden != "yes" %}
+        {% set_global visible_publications = visible_publications | concat(with=pub) %}
       {% endif %}
+    {% endfor %}
 
+    {% for pub in visible_publications %}
       <li class="pub-item {% if loop.index % 2 == 0 %}pub-even{% else %}pub-odd{% endif %}" id="{{ pub.id }}">
 
         <div class="pub-thumbnail-col">
@@ -23,15 +25,16 @@
         </div>
 
         <div class="pub-content-col">
-
           {% if pub.author %}
-            <p class="pub-authors">
-              {{ pub.author | join(sep=", ") }}.
-            </p>
+            <p class="pub-authors">{{ pub.author | join(sep=", ") }}.</p>
           {% endif %}
 
           <h2 class="pub-title">
-            {{ pub.title }}
+            {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
+              <a href="{{ pub.fulltext_urls.0 }}" target="_blank" rel="noopener">{{ pub.title }}</a>
+            {% else %}
+              {{ pub.title }}
+            {% endif %}
           </h2>
 
           <p class="pub-citation">
@@ -43,11 +46,87 @@
               {{ pub.institution }}
             {% endif %}{% if pub.volume %}, {{ pub.volume }}{% endif %}{% if pub.year %} ({{ pub.year }}){% endif %}{% if pub.pages %}, pp. {{ pub.pages }}{% endif %}.
           </p>
-
         </div>
 
-      </li>
+        <div class="pub-actions-col">
+          <button class="action-btn toggle-overlay" data-target="urls-{{ pub.id }}" title="Links" aria-label="Links">
+            🔗
+          </button>
+          <button class="action-btn toggle-overlay" data-target="abs-{{ pub.id }}" title="Abstract" aria-label="Abstract">
+            ☰
+          </button>
+          <button class="action-btn toggle-overlay" data-target="bib-{{ pub.id }}" title="Cite" aria-label="Cite">
+            ❞
+          </button>
+        </div>
+
+        <div id="urls-{{ pub.id }}" class="pub-overlay hidden">
+          <div class="overlay-content">
+            <button class="close-overlay" aria-label="Close">&times;</button>
+            <h3>Available Links</h3>
+            {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
+              <ul class="overlay-links-list">
+                {% for url in pub.fulltext_urls %}
+                  <li><a href="{{ url }}" target="_blank" rel="noopener">{{ url }}</a></li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>No extra links available.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div id="abs-{{ pub.id }}" class="pub-overlay hidden">
+          <div class="overlay-content">
+            <button class="close-overlay" aria-label="Close">&times;</button>
+            <h3>Abstract</h3>
+            <p class="abstract-text">{{ pub.abstract | default(value="No abstract available.") }}</p>
+          </div>
+        </div>
+
+        <div id="bib-{{ pub.id }}" class="pub-overlay hidden">
+          <div class="overlay-content">
+            <button class="close-overlay" aria-label="Close">&times;</button>
+            <h3>BibTeX Citation</h3>
+            <pre class="bibtex-box"><code>@{{ pub.publication_type | default(value="article") }}{ { { pub.cite_key | default(value=pub.id) } },
+{% for key, value in pub %}{% if key != "abstract" and key != "publication_type" and key != "cite_key" and key != "id" and key != "thumbnail" and key != "featured" and key != "hidden" and key != "order" %}{% if value is iterable and value is not string %}  {{ key }} = { { { value | join(sep=" and ") } } },
+{% else %}  {{ key }} = { { { value } } },
+{% endif %}{% endif %}{% endfor %}}</code></pre>
+          </div>
+        </div>
+        </li>
     {% endfor %}
   </ul>
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Open Overlay
+    document.querySelectorAll('.toggle-overlay').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetId = btn.getAttribute('data-target');
+        const overlay = document.getElementById(targetId);
+        if (overlay) overlay.classList.remove('hidden');
+      });
+    });
+
+    // Close Overlay via 'X' button
+    document.querySelectorAll('.close-overlay').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        btn.closest('.pub-overlay').classList.add('hidden');
+      });
+    });
+
+    // Close Overlay by clicking outside the content block
+    document.querySelectorAll('.pub-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
 {% endblock content %}
