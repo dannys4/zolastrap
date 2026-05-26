@@ -88,10 +88,17 @@
           <div class="overlay-content">
             <button class="close-overlay" aria-label="Close">&times;</button>
             <h3>BibTeX Citation</h3>
-            <pre class="bibtex-box"><code>@{{ pub.publication_type | default(value="article") }}{ { { pub.cite_key | default(value=pub.id) } },
-{% for key, value in pub %}{% if key != "abstract" and key != "publication_type" and key != "cite_key" and key != "id" and key != "thumbnail" and key != "featured" and key != "hidden" and key != "order" %}{% if value is iterable and value is not string %}  {{ key }} = { { { value | join(sep=" and ") } } },
-{% else %}  {{ key }} = { { { value } } },
-{% endif %}{% endif %}{% endfor %}}</code></pre>
+            {% set remove_keys = ["abstract", "fulltext_urls", "publication_type", "cite_key", "id", "thumbnail", "featured", "hidden", "order"] %}
+            <pre class="bibtex-box"><code>@{{ pub.publication_type | default(value="article") }}<!--
+            -->{ {{ pub.cite_key | default(value=pub.id) }},<!--
+            -->{% for key, value in pub %}<!--
+            -->{% if key in remove_keys %}{% continue %}{% endif %}<!--
+            -->{% if value is string and value | trim | length == 0 %}{% continue %}{% endif %}<!--
+            -->{% if value is iterable and value is not string %}
+  {{ key }} = { {{ value | join(sep=" and ") }} },{% else %}
+  {{ key }} = { {{ value }} },{% endif %}{% endfor %}
+}
+</code></pre>
           </div>
         </div>
         </li>
