@@ -1,138 +1,114 @@
 {% extends "base.html" %}
 
+{% import "macros/render_pub_list.html" as pub_macros %}
+
 {% block content %}
 <main class="publications-container">
   {% set data = load_data(path="data/publications.json") %}
   {% set sorted_publications = data | sort(attribute="order") | reverse %}
+  {% set visible_all = [] %}
+  {% for pub in sorted_publications %}
+    {% if not pub.hidden or pub.hidden not in ["yes", "true"] %}
+      {% set_global visible_all = visible_all | concat(with=pub) %}
+    {% endif %}
+  {% endfor %}
 
-  <ul class="pub-list">
-    {% set visible_publications = [] %}
-    {% for pub in sorted_publications %}
-      {% if not pub.hidden or pub.hidden != "yes" %}
-        {% set_global visible_publications = visible_publications | concat(with=pub) %}
-      {% endif %}
-    {% endfor %}
+  {% set category_journals = [] %}
+  {% set category_preprints = [] %}
+  {% set category_conferences = [] %}
+  {% set category_books_other = [] %}
 
-    {% for pub in visible_publications %}
-      <li class="pub-item {% if loop.index % 2 == 0 %}pub-even{% else %}pub-odd{% endif %}" id="{{ pub.id }}">
+  {% for pub in visible_all %}
+    {% set is_preprint = false %}
+    {% if pub.publication_type == "article" and pub.journal and pub.journal is string and pub.journal is matching("[Pp]reprint") %}
+      {% set is_preprint = true %}
+    {% endif %}
 
-        <div class="pub-thumbnail-col">
-          {% if pub.thumbnail %}
-            <img src="img/publications/{{ pub.thumbnail }}" alt="Cover for {{ pub.title }}" class="pub-thumb">
-          {% else %}
-            <div class="pub-thumb-placeholder"></div>
-          {% endif %}
-        </div>
+    {% if is_preprint %}
+      {% set_global category_preprints = category_preprints | concat(with=pub) %}
+    {% elif pub.publication_type == "article" %}
+      {% set_global category_journals = category_journals | concat(with=pub) %}
+    {% elif pub.publication_type == "inproceedings" %}
+      {% set_global category_conferences = category_conferences | concat(with=pub) %}
+    {% else %}
+      {% set_global category_books_other = category_books_other | concat(with=pub) %}
+    {% endif %}
+  {% endfor %}
+  <div class="tab-navigation" role="tablist">
+    <button class="tab-btn active" data-tab="tab-journals" role="tab" aria-selected="true">Journal Publications ({{
+      category_journals | length }})</button>
+    <button class="tab-btn" data-tab="tab-preprints" role="tab" aria-selected="false">Preprints ({{ category_preprints |
+      length }})</button>
+    <button class="tab-btn" data-tab="tab-conferences" role="tab" aria-selected="false">Conference Proceedings ({{
+      category_conferences | length }})</button>
+    <button class="tab-btn" data-tab="tab-other" role="tab" aria-selected="false">Books and Other Press ({{
+      category_books_other | length }})</button>
+  </div>
+  <div class="tab-content-container">
 
-        <div class="pub-content-col">
-          {% if pub.author %}
-            <p class="pub-authors">{{ pub.author | join(sep=", ") }}.</p>
-          {% endif %}
+    <div id="tab-journals" class="tab-panel active" role="tabpanel">
+      {{ pub_macros::render_list(items=category_journals) }}
+    </div>
 
-          <h2 class="pub-title">
-            {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
-              <a href="{{ pub.fulltext_urls.0 }}" target="_blank" rel="noopener">{{ pub.title }}</a>
-            {% else %}
-              {{ pub.title }}
-            {% endif %}
-          </h2>
+    <div id="tab-preprints" class="tab-panel hidden" role="tabpanel">
+      {{ pub_macros::render_list(items=category_preprints) }}
+    </div>
 
-          <p class="pub-citation">
-            {% if pub.journal %}
-              {{ pub.journal }}
-            {% elif pub.booktitle %}
-              In {{ pub.booktitle }}
-            {% elif pub.institution %}
-              {{ pub.institution }}
-            {% endif %}{% if pub.volume %}, {{ pub.volume }}{% endif %}{% if pub.year %} ({{ pub.year }}){% endif %}{% if pub.pages %}, pp. {{ pub.pages }}{% endif %}.
-          </p>
-        </div>
+    <div id="tab-conferences" class="tab-panel hidden" role="tabpanel">
+      {{ pub_macros::render_list(items=category_conferences) }}
+    </div>
 
-        <div class="pub-actions-col">
-          <button class="action-btn toggle-overlay" data-target="urls-{{ pub.id }}" title="Links" aria-label="Links">
-            🔗
-          </button>
-          <button class="action-btn toggle-overlay" data-target="abs-{{ pub.id }}" title="Abstract" aria-label="Abstract">
-            ☰
-          </button>
-          <button class="action-btn toggle-overlay" data-target="bib-{{ pub.id }}" title="Cite" aria-label="Cite">
-            ❞
-          </button>
-        </div>
+    <div id="tab-other" class="tab-panel hidden" role="tabpanel">
+      {{ pub_macros::render_list(items=category_books_other) }}
+    </div>
 
-        <div id="urls-{{ pub.id }}" class="pub-overlay hidden">
-          <div class="overlay-content">
-            <button class="close-overlay" aria-label="Close">&times;</button>
-            <h3>Available Links</h3>
-            {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
-              <ul class="overlay-links-list">
-                {% for url in pub.fulltext_urls %}
-                  <li><a href="{{ url }}" target="_blank" rel="noopener">{{ url }}</a></li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <p>No extra links available.</p>
-            {% endif %}
-          </div>
-        </div>
-
-        <div id="abs-{{ pub.id }}" class="pub-overlay hidden">
-          <div class="overlay-content">
-            <button class="close-overlay" aria-label="Close">&times;</button>
-            <h3>Abstract</h3>
-            <p class="abstract-text">{{ pub.abstract | default(value="No abstract available.") }}</p>
-          </div>
-        </div>
-
-        <div id="bib-{{ pub.id }}" class="pub-overlay hidden">
-          <div class="overlay-content">
-            <button class="close-overlay" aria-label="Close">&times;</button>
-            <h3>BibTeX Citation</h3>
-            {% set remove_keys = ["abstract", "fulltext_urls", "publication_type", "cite_key", "id", "thumbnail", "featured", "hidden", "order"] %}
-            <pre class="bibtex-box"><code>@{{ pub.publication_type | default(value="article") }}<!--
-            -->{ {{ pub.cite_key | default(value=pub.id) }},<!--
-            -->{% for key, value in pub %}<!--
-            -->{% if key in remove_keys %}{% continue %}{% endif %}<!--
-            -->{% if value is string and value | trim | length == 0 %}{% continue %}{% endif %}<!--
-            -->{% if value is iterable and value is not string %}
-  {{ key }} = { {{ value | join(sep=" and ") }} },{% else %}
-  {{ key }} = { {{ value }} },{% endif %}{% endfor %}
-}
-</code></pre>
-          </div>
-        </div>
-        </li>
-    {% endfor %}
-  </ul>
+  </div>
 </main>
+
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Open Overlay
-    document.querySelectorAll('.toggle-overlay').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(p => p.classList.add('hidden'));
+
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(tab.getAttribute('data-tab'));
+        if (targetPanel) targetPanel.classList.remove('hidden');
+      });
+    });
+
+    // Global event delegation for modal overlays
+    document.addEventListener('click', (e) => {
+      const openBtn = e.target.closest('.toggle-overlay');
+      if (openBtn) {
         e.stopPropagation();
-        const targetId = btn.getAttribute('data-target');
+        const targetId = openBtn.getAttribute('data-target');
         const overlay = document.getElementById(targetId);
         if (overlay) overlay.classList.remove('hidden');
-      });
-    });
+        return;
+      }
 
-    // Close Overlay via 'X' button
-    document.querySelectorAll('.close-overlay').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      const closeBtn = e.target.closest('.close-overlay');
+      if (closeBtn) {
         e.stopPropagation();
-        btn.closest('.pub-overlay').classList.add('hidden');
-      });
-    });
+        closeBtn.closest('.pub-overlay').classList.add('hidden');
+        return;
+      }
 
-    // Close Overlay by clicking outside the content block
-    document.querySelectorAll('.pub-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.classList.add('hidden');
-        }
-      });
+      const overlayBackdrop = e.target.closest('.pub-overlay');
+      if (overlayBackdrop && e.target === overlayBackdrop) {
+        overlayBackdrop.classList.add('hidden');
+      }
     });
   });
 </script>

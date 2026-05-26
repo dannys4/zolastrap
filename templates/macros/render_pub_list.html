@@ -1,0 +1,104 @@
+
+{% macro render_list(items) %}
+{% if items | length == 0 %}
+<p class="no-pubs-msg">No publications found in this category.</p>
+{% else %}
+<ul class="pub-list">
+  {% for pub in items %}
+  <li class="pub-item {% if loop.index % 2 == 0 %}pub-even{% else %}pub-odd{% endif %}" id="{{ pub.id }}">
+
+    <div class="pub-thumbnail-col">
+      {% if pub.thumbnail %}
+      <img src="img/publications/{{ pub.thumbnail }}" alt="Cover for {{ pub.title }}" class="pub-thumb">
+      {% else %}
+      <img src="img/publications/default.png" alt="Cover for {{ pub.title }}" class="pub-thumb">
+      {% endif %}
+    </div>
+
+    <div class="pub-content-col">
+      {% if pub.author %}
+      <p class="pub-authors">{{ pub.author | join(sep=", ") }}.</p>
+      {% endif %}
+
+      <h2 class="pub-title">
+        {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
+        <a href="{{ pub.fulltext_urls.0 }}" target="_blank" rel="noopener">{{ pub.title }}</a>
+        {% else %}
+        {{ pub.title }}
+        {% endif %}
+      </h2>
+
+      <p class="pub-citation">
+        {% if pub.journal %}<!--
+        -->{{ pub.journal }},<!--
+      -->{% elif pub.booktitle %}<!--
+        -->In {{ pub.booktitle }}<!--
+      -->{% elif pub.institution %}<!--
+        -->{{ pub.institution }}<!--
+      -->{% endif %}<!--
+      -->{% if pub.volume %}<!--
+        --> {{ pub.volume }}<!--
+      -->{% endif %}<!--
+      -->{% if pub.year %}<!--
+        --> ({{ pub.year }})<!--
+      -->{% endif %}<!--
+      -->{% if pub.pages %}<!--
+        -->, pp. {{ pub.pages }}<!--
+      -->{% endif %}
+      </p>
+    </div>
+
+    <div class="pub-actions-col">
+      <button class="action-btn toggle-overlay" data-target="urls-{{ pub.id }}" title="Links">🔗</button>
+      <button class="action-btn toggle-overlay" data-target="abs-{{ pub.id }}" title="Abstract">☰</button>
+      <button class="action-btn toggle-overlay" data-target="bib-{{ pub.id }}" title="Cite">❞</button>
+    </div>
+
+    <div id="urls-{{ pub.id }}" class="pub-overlay hidden">
+      <div class="overlay-content">
+        <button class="close-overlay">&times;</button>
+        <h3>Available Links</h3>
+        {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
+        <ul class="overlay-links-list">
+          {% for url in pub.fulltext_urls %}
+          <li><a href="{{ url }}" target="_blank" rel="noopener">{{ url }}</a></li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No extra links available.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div id="abs-{{ pub.id }}" class="pub-overlay hidden">
+      <div class="overlay-content">
+        <button class="close-overlay">&times;</button>
+        <h3>Abstract</h3>
+        <p class="abstract-text">{{ pub.abstract | default(value="No abstract available.") }}</p>
+      </div>
+    </div>
+
+    <div id="bib-{{ pub.id }}" class="pub-overlay hidden">
+      <div class="overlay-content">
+        <button class="close-overlay">&times;</button>
+        <h3>BibTeX Citation</h3>
+        {% set remove_keys = ["abstract", "fulltext_urls", "publication_type", "cite_key", "id", "thumbnail",
+        "featured", "hidden", "order"] %}
+        <pre class="bibtex-box"><code>@{{ pub.publication_type | default(value="article") }}<!--
+            -->{ {{ pub.cite_key | default(value=pub.id) }},<!--
+            -->{% for key, value in pub %}<!--
+            -->{% if key in remove_keys %}{% continue %}{% endif %}<!--
+            -->{% if value is string and value | trim | length == 0 %}{% continue %}{% endif %}<!--
+            -->{% if value is iterable and value is not string %}
+  {{ key }} = { {{ value | join(sep=" and ") }} },{% else %}
+  {{ key }} = { {{ value }} },{% endif %}{% endfor %}
+}
+</code></pre>
+      </div>
+    </div>
+
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endmacro render_list %}
