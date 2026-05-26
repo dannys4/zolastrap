@@ -25,6 +25,21 @@
   </div>
 {% endmacro render_person_card %}
 
+{% macro render_alumni_list(alumni_list, alumni_type) %}
+{% if alumni_list | length > 0 %}
+  <h3>{{ alumni_type }}</h3>
+  <ul class="alumni-text-list">
+    {% for person in alumni_list %}
+      <li>{% if person.www and person.www != "" %}<!--
+      --><a href="{{ person.www }}" target="_blank" rel="noopener" class="linked-alum">{{ person.name }}</a><!--
+      -->{% else %}<!--
+      --><span class="unlinked-alum">{{ person.name }}</span><!--
+      -->{% endif %}{% if person.affiliation %} ({{ person.affiliation }}){% endif %}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endmacro render_alumni_list %}
+
 {% block content %}
 <main class="people-container">
   {% set data = load_data(path="data/people.json") %}
@@ -35,6 +50,9 @@
   {% set alumni_scientists = [] %}
   {% set alumni_students = [] %}
   {% set alumni_postdocs = [] %}
+  {% set alumni_sm_students = [] %}
+  {% set alumni_undergrads = [] %}
+  {% set alumni_visitors = [] %}
 
   {% for person in data %}
     {% if person.type == "pi" %}
@@ -49,6 +67,12 @@
       {% set_global alumni_postdocs = alumni_postdocs | concat(with=person) %}
     {% elif person.type == "phd-alumn" %}
       {% set_global alumni_students = alumni_students | concat(with=person) %}
+    {% elif person.type == "sm-alumn" %}
+      {% set_global alumni_sm_students = alumni_sm_students | concat(with=person) %}
+    {% elif person.type == "visitor-alumn" %}
+      {% set_global alumni_visitors = alumni_visitors | concat(with=person) %}
+    {% elif person.type == "undergrad-alumn" %}
+      {% set_global alumni_undergrads = alumni_undergrads | concat(with=person) %}
     {% endif %}
   {% endfor %}
 
@@ -90,26 +114,11 @@
     <div class="alumni-container-grid">
 
       <div class="alumni-column">
-        {% if alumni_scientists | length > 0 %}
-          <h3>Research Scientists</h3>
-          <ul class="alumni-text-list">
-            {% for person in alumni_scientists %}
-              <li><strong>{{ person.name }}</strong> {% if person.affiliation %}({{ person.affiliation }}){% endif %}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+        {{ self::render_alumni_list(alumni_list=alumni_scientists, alumni_type="Research Scientists") }}
+        {{ self::render_alumni_list(alumni_list=alumni_postdocs, alumni_type="Postdoctoral Associates") }}
+        {{ self::render_alumni_list(alumni_list=alumni_visitors, alumni_type="Long-term Visitors") }}
+        {{ self::render_alumni_list(alumni_list=alumni_undergrads, alumni_type="Undergraduate Students") }}
 
-        {% if alumni_postdocs | length > 0 %}
-          <h3>Postdoctoral Associates</h3>
-          <ul class="alumni-text-list">
-            {% for person in alumni_postdocs %}
-              <li>
-                <strong>{{ person.name }}</strong>
-                {% if person.affiliation %}({{ person.affiliation }}){% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
       </div>
 
       <div class="alumni-column">
@@ -119,7 +128,12 @@
             {% for person in alumni_students %}
               <li>
                 <div class="alumni-lead">
-                  <strong>{{ person.name }}</strong>
+                {% if person.www and person.www != "" %}<!--
+              --><a href="{{ person.www }}" target="_blank" rel="noopener" class="linked-alum">{{ person.name }}</a><!--
+              -->{% else %}<!--
+              --><span class="unlinked-alum">{{ person.name }}</span><!--
+              -->{% endif %}{% if person.affiliation %} ({{ person.affiliation }}){% endif %}
+
                   {% if person.graduated %}<span class="grad-date">(graduated {{ person.graduated }})</span>{% endif %}
                 </div>
                 {% if person.thesis %}
@@ -132,6 +146,7 @@
             {% endfor %}
           </ul>
         {% endif %}
+        {{ self::render_alumni_list(alumni_list=alumni_sm_students, alumni_type="SM Students") }}
       </div>
 
     </div>

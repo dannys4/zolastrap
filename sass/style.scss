@@ -146,7 +146,7 @@
 }
 
 .navbar-vert {
-  max-height: min(7vh, 50px)
+  max-height: min(7vh, 50px);
 }
 
 .group-name-overlay {
@@ -276,12 +276,6 @@
 }
 
 /* --- INDIVIDUAL TEAM MEMBER CARDS --- */
-.person-card {
-  display: grid;
-  grid-template-columns: 110px 1fr; /* Set portrait image size rules */
-  gap: 16px;
-  align-items: flex-start;
-}
 
 .person-img {
   width: 100px;
@@ -290,27 +284,9 @@
   border-radius: 2px;
 }
 
-.person-img-placeholder {
-  width: 100px;
-  height: 125px;
-  background-color: #eee;
-  border: 1px solid #ddd;
-}
-
 .person-info-col {
   display: flex;
   flex-direction: column;
-}
-
-.person-name {
-  margin: 0 0 6px 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #111;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 /* Custom red text web address links matching your screenshot profile text */
@@ -323,14 +299,6 @@
 }
 .person-link:hover {
   text-decoration: underline;
-}
-
-.person-bio {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: #444;
-  text-align: justify;
 }
 
 /* --- ALUMNI COLUMN LAYOUTS --- */
@@ -361,14 +329,23 @@
   list-style: none;
   padding: 0;
   margin: 0 0 24px 0;
-  line-height: 1.6;
+  line-height: 1.5;
   font-size: 0.95rem;
 }
+
 .alumni-text-list li {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
-.alumni-text-list strong {
+
+.linked-alum {
   color: #a33b23; /* Matching the deep red highlight for alumni names */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.unlinked-alum {
+  color: black; /* Matching the deep red highlight for alumni names */
+  font-weight: bold;
 }
 
 /* Detailed nested blocks for PhD Graduated alumni listings */
@@ -377,11 +354,11 @@
   padding: 0;
   margin: 0;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .alumni-details-list li {
-  margin-bottom: 16px;
+  margin-bottom: 5px;
 }
 
 .alumni-lead strong {
@@ -401,4 +378,49 @@
   color: #444;
   text-indent: -2px;
   padding-left: 2px;
+}
+
+.person-card {
+  display: grid;
+  /* 1. Increased from 110px to 135px to give the headshot more space */
+  grid-template-columns: 135px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.person-img {
+  /* 2. Scaled up width and height dynamically while preserving aspect ratio */
+  width: 140px;
+  height: 175px; /* Keeps the classic 4:5 academic portrait aspect ratio */
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle depth accent line */
+}
+
+.person-img-placeholder {
+  width: 125px;
+  height: 156px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+}
+
+.person-bio {
+  margin: 0;
+  font-size: 0.85rem;
+  /* 3. Tightened from 1.45 to 1.35 line height for cleaner presentation */
+  line-height: 1.25;
+  color: #444;
+  text-align: justify;
+}
+
+/* Adjust layout spacing slightly for the row title blocks */
+.person-name {
+  margin: 0 0 4px 0; /* Slightly reduced bottom margin */
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
