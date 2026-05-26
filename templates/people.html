@@ -1,1 +1,141 @@
 {% extends "base.html" %}
+
+{% macro render_person_card(person) %}
+  <div class="person-card">
+    <div class="person-photo-col">
+      {% if person.photo %}
+        <img src="img/people/{{ person.photo }}" alt="{{ person.name }}" class="person-img">
+      {% else %}
+        <div class="person-img-placeholder"></div>
+      {% endif %}
+    </div>
+    <div class="person-info-col">
+      <h3 class="person-name">
+        {{ person.name }}
+
+        {% if person.www and person.www != "" %}
+          <a href="{{ person.www }}" class="person-link" target="_blank" rel="noopener">WWW</a>
+        {% endif %}
+        {% if person.cv and person.cv != "" %}
+          <a href="{{ person.cv }}" class="person-link" target="_blank" rel="noopener">CV</a>
+        {% endif %}
+      </h3>
+      <p class="person-bio">{{ person.bio }}</p>
+    </div>
+  </div>
+{% endmacro render_person_card %}
+
+{% block content %}
+<main class="people-container">
+  {% set data = load_data(path="data/people.json") %}
+
+  {% set pi_list = [] %}
+  {% set postdocs = [] %}
+  {% set phd_students = [] %}
+  {% set alumni_scientists = [] %}
+  {% set alumni_students = [] %}
+  {% set alumni_postdocs = [] %}
+
+  {% for person in data %}
+    {% if person.type == "pi" %}
+      {% set_global pi_list = pi_list | concat(with=person) %}
+    {% elif person.type == "postdoc" %}
+      {% set_global postdocs = postdocs | concat(with=person) %}
+    {% elif person.type == "phd" %}
+      {% set_global phd_students = phd_students | concat(with=person) %}
+    {% elif person.type == "research-scientist-alumn" %}
+      {% set_global alumni_scientists = alumni_scientists | concat(with=person) %}
+    {% elif person.type == "postdoc-alumn" %}
+      {% set_global alumni_postdocs = alumni_postdocs | concat(with=person) %}
+    {% elif person.type == "phd-alumn" %}
+      {% set_global alumni_students = alumni_students | concat(with=person) %}
+    {% endif %}
+  {% endfor %}
+
+  {% if pi_list | length > 0 %}
+    <section class="people-section">
+      <h2 class="section-title">Principal Investigator</h2>
+      <div class="pi-grid">
+        {% for person in pi_list %}
+          {{ self::render_person_card(person=person) }}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if postdocs | length > 0 %}
+    <section class="people-section">
+      <h2 class="section-title">Postdoctoral Associates</h2>
+      <div class="people-grid">
+        {% for person in postdocs %}
+          {{ self::render_person_card(person=person) }}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if phd_students | length > 0 %}
+    <section class="people-section">
+      <h2 class="section-title">Graduate Students, PhD</h2>
+      <div class="people-grid">
+        {% for person in phd_students %}
+          {{ self::render_person_card(person=person) }}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="people-section alumni-section">
+    <h2 class="section-title">Alumni</h2>
+    <div class="alumni-container-grid">
+
+      <div class="alumni-column">
+        {% if alumni_scientists | length > 0 %}
+          <h3>Research Scientists</h3>
+          <ul class="alumni-text-list">
+            {% for person in alumni_scientists %}
+              <li><strong>{{ person.name }}</strong> {% if person.affiliation %}({{ person.affiliation }}){% endif %}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if alumni_postdocs | length > 0 %}
+          <h3>Postdoctoral Associates</h3>
+          <ul class="alumni-text-list">
+            {% for person in alumni_postdocs %}
+              <li>
+                <strong>{{ person.name }}</strong>
+                {% if person.affiliation %}({{ person.affiliation }}){% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="alumni-column">
+        {% if alumni_students | length > 0 %}
+          <h3>PhD Students</h3>
+          <ul class="alumni-details-list">
+            {% for person in alumni_students %}
+              <li>
+                <div class="alumni-lead">
+                  <strong>{{ person.name }}</strong>
+                  {% if person.graduated %}<span class="grad-date">(graduated {{ person.graduated }})</span>{% endif %}
+                </div>
+                {% if person.thesis %}
+                  <div class="alumni-thesis">◦ <strong>Thesis:</strong> {{ person.thesis }}</div>
+                {% endif %}
+                {% if person.affiliation %}
+                  <div class="alumni-affiliation">◦ <strong>Affiliation:</strong> {{ person.affiliation }}</div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+    </div>
+  </section>
+</main>
+
+{% endblock content %}

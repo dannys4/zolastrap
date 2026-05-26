@@ -231,3 +231,174 @@
   font-style: italic;
   text-align: center;
 }
+
+/* Container adjustments */
+.people-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+/* Category header titles styling rules */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 6px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+/* --- GRIDS SYSTEM --- */
+
+/* PI stretches wider across its row container area */
+.pi-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Postdocs and Students sit perfectly in pairs side by side */
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px 40px; /* Generous space between cards horizontally & vertically */
+}
+
+/* Responsive adjustment for mobile viewports */
+@media (max-width: 768px) {
+  .people-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- INDIVIDUAL TEAM MEMBER CARDS --- */
+.person-card {
+  display: grid;
+  grid-template-columns: 110px 1fr; /* Set portrait image size rules */
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.person-img {
+  width: 100px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.person-img-placeholder {
+  width: 100px;
+  height: 125px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+}
+
+.person-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.person-name {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Custom red text web address links matching your screenshot profile text */
+.person-link {
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: #a33b23;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.person-link:hover {
+  text-decoration: underline;
+}
+
+.person-bio {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #444;
+  text-align: justify;
+}
+
+/* --- ALUMNI COLUMN LAYOUTS --- */
+.alumni-container-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .alumni-container-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alumni-column h3 {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-bottom: 2px;
+  font-weight: bold;
+}
+
+/* Unstyled inline listings for Scientists and Postdocs lists */
+.alumni-text-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+.alumni-text-list li {
+  margin-bottom: 6px;
+}
+.alumni-text-list strong {
+  color: #a33b23; /* Matching the deep red highlight for alumni names */
+}
+
+/* Detailed nested blocks for PhD Graduated alumni listings */
+.alumni-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.alumni-details-list li {
+  margin-bottom: 16px;
+}
+
+.alumni-lead strong {
+  color: #a33b23;
+  font-size: 0.95rem;
+}
+
+.alumni-lead .grad-date {
+  color: #666;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+
+.alumni-thesis,
+.alumni-affiliation {
+  margin-left: 8px;
+  color: #444;
+  text-indent: -2px;
+  padding-left: 2px;
+}
