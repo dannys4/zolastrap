@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="publications-container">
+  {% set data = load_data(path="data/publications.json") %}
+
+  {% set sorted_publications = data | sort(attribute="order") | reverse %}
+
+  <ul class="pub-list">
+    {% for pub in sorted_publications %}
+      {% if pub.hidden and pub.hidden == "true" %}
+        {% continue %}
+      {% endif %}
+
+      <li class="pub-item {% if loop.index % 2 == 0 %}pub-even{% else %}pub-odd{% endif %}" id="{{ pub.id }}">
+
+        <div class="pub-thumbnail-col">
+          {% if pub.thumbnail %}
+            <img src="{{ pub.thumbnail }}" alt="Cover for {{ pub.title }}" class="pub-thumb">
+          {% else %}
+            <div class="pub-thumb-placeholder"></div>
+          {% endif %}
+        </div>
+
+        <div class="pub-content-col">
+
+          {% if pub.author %}
+            <p class="pub-authors">
+              {{ pub.author | join(sep=", ") }}.
+            </p>
+          {% endif %}
+
+          <h2 class="pub-title">
+            {{ pub.title }}
+          </h2>
+
+          <p class="pub-citation">
+            {% if pub.journal %}
+              {{ pub.journal }}
+            {% elif pub.booktitle %}
+              In {{ pub.booktitle }}
+            {% elif pub.institution %}
+              {{ pub.institution }}
+            {% endif %}{% if pub.volume %}, {{ pub.volume }}{% endif %}{% if pub.year %} ({{ pub.year }}){% endif %}{% if pub.pages %}, pp. {{ pub.pages }}{% endif %}.
+          </p>
+
+        </div>
+
+      </li>
+    {% endfor %}
+  </ul>
+</main>
+{% endblock content %}

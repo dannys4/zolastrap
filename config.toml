@@ -5,12 +5,6 @@ compile_sass = true
 title = "Zolastrap"
 description = "A Bootstrap theme for Zola"
 generate_feed = false
-output_dir = "docs"
-
-taxonomies = [
-  {name = "tags", paginate_by = 5},
-  {name = "authors", paginate_by = 5},
-]
 
 build_search_index = true
 
@@ -20,31 +14,20 @@ highlight_code = true
 [extra]
 banner = "img/banner.jpeg"
 date_format = '%d/%m/%Y'
+group_name = ""
 
 theme = 'simplex'
 bg = "dark"
 inverted = false
 
-themes = "Choose a Theme"
-schemes = "Choose a Color Scheme"
-search = 'Search'
-tag = 'Posts by Topic'
-tags = 'Posts by Topics'
 
 links = [
-	{title = 'Articles', url = 'articles'},
-  {title = 'People', url = 'authors'},
+	{title = 'Publications', url = 'publications'},
+  {title = 'People', url = 'people'},
 	{title = 'About', url = 'about'},
 	{title = 'Topics', url = 'tags'},
-	{title = 'Github', url = 'https://github.com/marcodpt/zolastrap'},
 ]
-email = "user@mail.com"
-icons = [
-  {title = 'Facebook', icon = 'facebook-f', url = 'https://www.facebook.com'},
-  {title = 'Instagram', icon = 'instagram', url = 'https://www.instagram.com'},
-  {title = 'Twitter', icon = 'twitter', url = 'https://twitter.com'},
-  {title = 'YouTube', icon = 'youtube', url = 'https://www.youtube.com'}
-]
+icons = []
 
 utterances = ""
 utterances_label = "Comments"

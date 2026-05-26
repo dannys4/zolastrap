@@ -11,17 +11,15 @@ homepage = "https://marcodpt.github.io"
 
 [extra]
 banner = ""
+group_name = ""
+institution_name = ""
+institution_url = ""
 date_format = '%d/%m/%Y'
 
 theme = 'default'
 bg = "dark"
 inverted = false
 
-themes = "Choose a Theme"
-schemes = "Choose a Color Scheme"
-search = 'Search'
-tag = 'Posts by Topic'
-tags = 'Posts by Topics'
 
 links = []
 email = ""
