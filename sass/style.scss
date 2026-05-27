@@ -17,7 +17,7 @@
 }
 
 .pub-odd { background-color: #ffffff; }
-.pub-even { background-color: #f9f9f9; }
+.pub-even { background-color: #f5f5f5; }
 
 /* Left & Center column layouts remain intact */
 .pub-thumbnail-col { display: flex; justify-content: center; }
@@ -534,4 +534,8 @@ footer .w-100 {
 .important-links h4 {
   margin-top: 1vh;
   margin-left: 1rem;
+}
+
+.contact-link {
+  text-decoration-color: #efefef;
 }

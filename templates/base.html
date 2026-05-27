@@ -174,11 +174,13 @@
         <div class="row row-cols-2 g-4 align-items-center justify-content-center">
           {% for logo in config.extra.footer_logos %}
             <div class="text-center d-flex justify-content-center align-items-center">
+              {% if logo.href %}<a href="{{ logo.href }}">{% endif %}
               <img
                 src="{{ get_url(path='/img/logos/' ~ logo.src) }}"
                 alt="{{ logo.alt }}"
                 class="img-fluid footer-logo"
               >
+              {% if logo.href %}</a>{% endif %}
             </div>
           {% endfor %}
         </div>
@@ -193,11 +195,11 @@
           {% for person in config.extra.people %}
             <div class="col-12 col-sm-6 text-start footer-contact-block d-flex flex-column gap-1">
 
-              {% if not person.link %}
+              {% if person.link %}<a href="{{person.link}}" class="contact-link">{% endif %}
                 <h5 class="fw-bold mb-1 text-white-50" style="font-size: 1.1rem; letter-spacing: 0.5px;">
                   {{ person.name }}
                 </h5>
-              {% endif %}
+              {% if person.link %}</a>{% endif %}
 
               {% if person.job %}
                 <div class="text-secondary small mb-2" style="line-height: 1.2;">
@@ -225,7 +227,7 @@
                   <span class="text-secondary">📍</span>
                   <div class="lh-sm">
                     {% if person.address_link %}
-                      <a href="{{person.address_link}}" class="text-reset text-decoration-none hover-underline">{{ person.address }}</a>
+                      <a href="{{person.address_link}}" class="text-reset">{{ person.address }}</a>
                     {% else %}
                       {{ person.address }}
                     {% endif %}
