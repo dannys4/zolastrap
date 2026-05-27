@@ -1,0 +1,46 @@
+<div class="card shadow-sm border mb-4 overflow-hidden">
+  <div class="row g-0 align-items-center">
+
+    {# 1. Image Column: Takes up 4 out of 12 columns on desktop #}
+    {% if img %}
+    <div class="col-12 col-md-4 bg-light text-center">
+      <img
+        src="{{ get_url(path="img/teaching/"~img) }}"
+        alt="Visual representation for {{ title }}"
+        class="img-fluid w-100"
+        style="object-fit: cover; max-height: 220px; min-height: 100%;"
+      />
+    </div>
+    {% endif %}
+
+    {# 2. Text Column: Takes up remaining 8 columns (or all 12 if no image) #}
+    <div class="col-12 {% if img %}col-md-8{% endif %}">
+      <div class="card-body p-4">
+
+        {# Course Meta Badge + Title #}
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+          {% if code %}
+            <span class="badge bg-secondary font-monospace" style="font-size: 0.9rem;">{{ code }}</span>
+          {% endif %}
+          <h3 class="h5 fw-bold text-dark mb-0">
+            {{ title }}
+          </h3>
+        </div>
+
+        {# Term / Semester Meta #}
+        {% if offered %}
+          <div class="text-muted small mb-3">
+            <strong>Offered</strong> {{ offered }}
+          </div>
+        {% endif %}
+
+        {# Course Description #}
+        <div class="text-secondary small card-text lh-base">
+          {{ body | safe }}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
