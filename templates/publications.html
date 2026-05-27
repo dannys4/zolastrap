@@ -47,19 +47,19 @@
   <div class="tab-content-container">
 
     <div id="tab-journals" class="tab-panel active" role="tabpanel">
-      {{ pub_macros::render_list(items=category_journals) }}
+      {{ pub_macros::render_list(items=category_journals, pubtype="article") }}
     </div>
 
     <div id="tab-preprints" class="tab-panel hidden" role="tabpanel">
-      {{ pub_macros::render_list(items=category_preprints) }}
+      {{ pub_macros::render_list(items=category_preprints, pubtype="article") }}
     </div>
 
     <div id="tab-conferences" class="tab-panel hidden" role="tabpanel">
-      {{ pub_macros::render_list(items=category_conferences) }}
+      {{ pub_macros::render_list(items=category_conferences, pubtype="conference") }}
     </div>
 
     <div id="tab-other" class="tab-panel hidden" role="tabpanel">
-      {{ pub_macros::render_list(items=category_books_other) }}
+      {{ pub_macros::render_list(items=category_books_other, pubtype="other") }}
     </div>
 
   </div>

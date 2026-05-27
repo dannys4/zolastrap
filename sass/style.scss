@@ -155,6 +155,22 @@ footer .w-100 {
   max-height: min(7vh, 70px);
   z-index: 9999 !important
 }
+
+/* Desktop Alignment Match (Screens 992px and wider) */
+@media (min-width: 992px) {
+  /* 1. Force the navbar container's inner content block to start exactly at the 5% line */
+  .navbar-vert .container-fluid {
+    padding-left: 5% !important;
+  }
+
+  /* 2. Remove the default left padding from the very first navigation link.
+     This removes the invisible text-padding gap so the letter "H" in "Home"
+     aligns pixel-perfectly flush with the "U" in "Uncertainty". */
+  .navbar-nav .nav-item:first-child .nav-link {
+    padding-left: 0 !important;
+  }
+}
+
 @media (max-width: 991px) {
   /* 1. Lift the animation layer context so it sits over the grid text safely */
   .navbar-collapse {

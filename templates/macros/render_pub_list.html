@@ -1,5 +1,71 @@
 
-{% macro render_list(items) %}
+{% macro article_html(pub) %}
+  {% if pub.author %}
+  <p class="pub-authors">{{ pub.author | join(sep=", ") }}.</p>
+  {% endif %}
+
+  <h2 class="pub-title">
+    {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
+    <a href="{{ pub.fulltext_urls.0 }}" target="_blank" rel="noopener">{{ pub.title }}</a>
+    {% else %}
+    {{ pub.title }}
+    {% endif %}
+  </h2>
+
+  <p class="pub-citation">
+    {% if pub.journal %}<!--
+    -->{{ pub.journal }},<!--
+  -->{% elif pub.booktitle %}<!--
+    -->In {{ pub.booktitle }}<!--
+  -->{% elif pub.institution %}<!--
+    -->{{ pub.institution }}<!--
+  -->{% endif %}<!--
+  -->{% if pub.volume %}<!--
+    --> {{ pub.volume }}<!--
+  -->{% endif %}<!--
+  -->{% if pub.year %}<!--
+    --> ({{ pub.year }})<!--
+    -->{% if not pub.pages %}.{% endif %}<!--
+  -->{% endif %}<!--
+  -->{% if pub.pages %}<!--
+    -->, pp. {{ pub.pages }}.<!--
+  -->{% endif %}
+  </p>
+{% endmacro article_html %}
+
+{% macro conference_html(pub) %}
+  {% if pub.author %}
+  <p class="pub-authors">{{ pub.author | join(sep=", ") }}.</p>
+  {% endif %}
+
+  <h2 class="pub-title">
+    {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
+    <a href="{{ pub.fulltext_urls.0 }}" target="_blank" rel="noopener">{{ pub.title }}</a>
+    {% else %}
+    {{ pub.title }}
+    {% endif %}
+  </h2>
+
+  <p class="pub-citation">
+    {% if pub.booktitle %}<!--
+    -->In {{ pub.booktitle }}<!--
+  -->{% elif pub.institution %}<!--
+    -->{{ pub.institution }}<!--
+  -->{% endif %}<!--
+  -->{% if pub.volume %}<!--
+    --> {{ pub.volume }}<!--
+  -->{% endif %}<!--
+  -->{% if pub.year %}<!--
+    --> ({{ pub.year }})<!--
+    -->{% if not pub.pages %}.{% endif %}<!--
+  -->{% endif %}<!--
+  -->{% if pub.pages %}<!--
+    -->, pp. {{ pub.pages }}.<!--
+  -->{% endif %}
+  </p>
+{% endmacro conference_html %}
+
+{% macro render_list(items, pubtype) %}
 {% if items | length == 0 %}
 <p class="no-pubs-msg">No publications found in this category.</p>
 {% else %}
@@ -16,37 +82,13 @@
     </div>
 
     <div class="pub-content-col">
-      {% if pub.author %}
-      <p class="pub-authors">{{ pub.author | join(sep=", ") }}.</p>
+      {% if pubtype == "article" %}
+        {{ self::article_html(pub=pub) }}
+      {% elif pubtype == "conference" %}
+        {{ self::conference_html(pub=pub) }}
+      {% else %}
+        {{ self::article_html(pub=pub) }}
       {% endif %}
-
-      <h2 class="pub-title">
-        {% if pub.fulltext_urls and pub.fulltext_urls | length > 0 %}
-        <a href="{{ pub.fulltext_urls.0 }}" target="_blank" rel="noopener">{{ pub.title }}</a>
-        {% else %}
-        {{ pub.title }}
-        {% endif %}
-      </h2>
-
-      <p class="pub-citation">
-        {% if pub.journal %}<!--
-        -->{{ pub.journal }},<!--
-      -->{% elif pub.booktitle %}<!--
-        -->In {{ pub.booktitle }}<!--
-      -->{% elif pub.institution %}<!--
-        -->{{ pub.institution }}<!--
-      -->{% endif %}<!--
-      -->{% if pub.volume %}<!--
-        --> {{ pub.volume }}<!--
-      -->{% endif %}<!--
-      -->{% if pub.year %}<!--
-        --> ({{ pub.year }})<!--
-        -->{% if not pub.pages %}.{% endif %}<!--
-      -->{% endif %}<!--
-      -->{% if pub.pages %}<!--
-        -->, pp. {{ pub.pages }}.<!--
-      -->{% endif %}
-      </p>
     </div>
 
     <div class="pub-actions-col">
