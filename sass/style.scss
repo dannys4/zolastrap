@@ -145,6 +145,11 @@
   position: relative;
 }
 
+footer .w-100 {
+  max-height: none;
+  height: auto;
+}
+
 .navbar-vert {
   position: relative;
   max-height: min(7vh, 70px);
