@@ -506,8 +506,8 @@ footer .w-100 {
 
 /* Clean text hover state decoration rules */
 .hover-underline:hover {
-  text-decoration: underline !important;
-  color: #ffffff !important;
+  text-decoration: underline;
+  color: #ffffff;
 }
 
 /* Structural padding preservation for small phone viewports */
@@ -521,3 +521,12 @@ footer .w-100 {
     border-bottom: none;
   }
 }
+
+
+.software-list ol {
+  font-size: 0.875rem; line-height: 1.4;
+}
+.software-list h4 {
+  font-size: 0.9rem; letter-spacing: 0.5px;
+}
+.software-list a:hover { color: #000 }

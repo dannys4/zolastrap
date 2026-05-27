@@ -1,0 +1,78 @@
+{% set pub_data = load_data(path="data/publications.json") %}
+
+<div class="card shadow-sm border mb-4">
+  <div class="card-body p-4">
+
+    {# Header Section #}
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-2 mb-3">
+      <h3 class="h5 fw-bold text-dark mb-0">
+        {{ name }}
+      </h3>
+      <div class="d-flex gap-2">
+        {% if github %}
+          <a href="https://github.com/{{ github }}" class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener">
+            <i class="fab fa-github me-1"></i> GitHub
+          </a>
+        {% endif %}
+        {% if site %}
+          <a href="{{ site }}" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener">
+            🌐 Project Site
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {# Main Description #}
+    <div class="text-secondary small mb-3">
+      {{ body | safe }}
+    </div>
+
+    {# Multi-Publication Citation Section #}
+    {% if pub_keys %}
+      <div class="mt-4 pt-3 border-top border-light-subtle software-list">
+        <h4 class="h6 fw-bold text-dark mb-2">
+          Relevant publications:
+        </h4>
+        <ol class="list-unstyled mb-0 d-flex flex-column gap-2">
+          {% for key in pub_keys %}
+            {# Locate the entry matching the current key against the JSON 'cite_key' field #}
+            {% for entry in pub_data %}
+              {% if entry.cite_key == key %}
+                {% set_global matched_pub = entry %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+            {# Format and display the entry if found #}
+            {% if matched_pub %}
+              <li class="text-muted text-start ps-0">
+
+                {# 1. Authors: Handle the array format and join with commas #}
+                <span class="text-dark">
+                  {% for auth in matched_pub.author %}<!--
+                    -->{{ auth }}{% if not loop.last %}, {% endif %}<!--
+                -->{% endfor %}<!--
+              --></span>.
+
+                {# 2. Title: Dynamic link picking the first item from fulltext_urls if it exists #}
+                {% if matched_pub.fulltext_urls and matched_pub.fulltext_urls | length > 0 %}
+                  <a href="{{ matched_pub.fulltext_urls[0] }}" class="text-primary text-decoration-none hover-underline fw-medium" target="_blank" rel="noopener">
+                    {{ matched_pub.title }}</a>.
+                {% else %}
+                  <span class="fw-medium text-dark">"{{ matched_pub.title }}."</span>
+                {% endif %}
+
+                {# 3. Journal / Venue info #}
+                {% if matched_pub.journal %}
+                  <em class="text-secondary">{{ matched_pub.journal }}</em>{% if matched_pub.volume %}, {{ matched_pub.volume }}{% endif %}{% if matched_pub.pages %}, pp. {{ matched_pub.pages }}{% endif %}{% endif %}{% if matched_pub.booktitle %}<em class="text-secondary">{{ matched_pub.booktitle }}</em>{% endif %}
+
+                {# 4. Year #}
+                ({{ matched_pub.year }}).
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
