@@ -147,7 +147,7 @@
 
 .navbar-vert {
   position: relative;
-  max-height: min(7vh, 50px);
+  max-height: min(7vh, 70px);
   z-index: 9999 !important
 }
 @media (max-width: 991px) {
@@ -451,4 +451,42 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* Ensure footer images behave uniformly */
+.footer-logo {
+  max-height: 50px;
+  width: auto;
+  max-width: 85%;
+  object-fit: contain;
+
+  /* Turns standard dark/colored logo PNGs into crisp, readable semi-transparent white marks */
+  filter: brightness(0.8) invert(0.25); /* Subtle gray/white tint for dark mode cohesion */
+  opacity: 0.75;
+  transition: all 0.25s ease-in-out;
+}
+
+/* Subtle mouse hover interactivity */
+.footer-logo:hover {
+  filter: brightness(90%) invert(10%); /* Sharp white pop on hover */
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+/* Clean text hover state decoration rules */
+.hover-underline:hover {
+  text-decoration: underline !important;
+  color: #ffffff !important;
+}
+
+/* Structural padding preservation for small phone viewports */
+@media (max-width: 576px) {
+  .footer-contact-block {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .footer-contact-block:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
 }
