@@ -88,79 +88,81 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
-          <ul class="navbar-nav me-auto">
-            {% for link in config.extra.links %}
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="{% if not link.url is containing("://") %}{{config.base_url}}{% endif %}/{{link.url}}"
-                >{{link.title}}</a>
-              </li>
-            {% endfor %}
-            {% if config.extra.themes %}
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {{config.extra.themes}}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {% for theme in config.extra.data_themes %}
-                    <li>
-                      <a
-                        class="dropdown-item"
-                        href="#"
-                        onclick="switchTheme('{{theme}}')"
-                      >{{theme | capitalize}}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
+          <div class="navbar-mobile-card">
+            <ul class="navbar-nav me-auto">
+              {% for link in config.extra.links %}
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    href="{% if not link.url is containing("://") %}{{config.base_url}}{% endif %}/{{link.url}}"
+                  >{{link.title}}</a>
+                </li>
+              {% endfor %}
+              {% if config.extra.themes %}
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{config.extra.themes}}
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for theme in config.extra.data_themes %}
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          href="#"
+                          onclick="switchTheme('{{theme}}')"
+                        >{{theme | capitalize}}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endif %}
+              {% if config.extra.schemes %}
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{config.extra.schemes}}
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for scheme in config.extra.data_schemes %}
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          href="#"
+                          onclick="switchScheme('{{scheme}}')"
+                        >{{scheme | capitalize}}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endif %}
+            </ul>
+            {% if config.build_search_index %}
+            <form class="d-flex" onsubmit="return goSearch(event)">
+              <input
+                class="form-control me-sm-2"
+                type="text"
+                placeholder="{{config.extra.search}}"
+              />
+              <button
+                class="btn btn-secondary my-2 my-sm-0"
+                type="submit"
+              ><i class="fas fa-search"></i></button>
+            </form>
             {% endif %}
-            {% if config.extra.schemes %}
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {{config.extra.schemes}}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {% for scheme in config.extra.data_schemes %}
-                    <li>
-                      <a
-                        class="dropdown-item"
-                        href="#"
-                        onclick="switchScheme('{{scheme}}')"
-                      >{{scheme | capitalize}}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
-            {% endif %}
-          </ul>
-          {% if config.build_search_index %}
-          <form class="d-flex" onsubmit="return goSearch(event)">
-            <input
-              class="form-control me-sm-2"
-              type="text"
-              placeholder="{{config.extra.search}}"
-            />
-            <button
-              class="btn btn-secondary my-2 my-sm-0"
-              type="submit"
-            ><i class="fas fa-search"></i></button>
-          </form>
-          {% endif %}
+          </div>
         </div>
       </div>
     </nav>
