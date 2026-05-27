@@ -79,7 +79,7 @@
 
   {% if pi_list | length > 0 %}
     <section class="people-section">
-      <h2 class="section-title">Principal Investigator</h2>
+      <h2 class="section-title person-section-title">Principal Investigator</h2>
       <div class="pi-grid">
         {% for person in pi_list %}
           {{ self::render_person_card(person=person) }}

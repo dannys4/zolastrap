@@ -1,6 +1,6 @@
+{% import "macros/announcements.html" as announce %}
 <!DOCTYPE html>
 <html>
-
 <head>
   {% block head %}
   <link rel="icon" type="image/x-icon" href="{{ get_url(path=config.extra.favicon) }}">
@@ -128,9 +128,28 @@
       </div>
     </div>
   </nav>
-  <main class="container mx-auto my-2">
-    {% block content %}
-    {% endblock %}
+  <main class="container mx-auto my-4">
+    {# 1. Check if the current page should display the announcements column #}
+    {% if config.extra.announcement_pages and current_path in config.extra.announcement_pages %}
+      <div class="row g-4 lg:g-5">
+
+        {# Main Content Column (Takes up 8/12 of the space on large displays) #}
+        <div class="col-12 col-lg-8">
+          {% block content %}
+          {% endblock %}
+        </div>
+
+        {# Announcements Sidebar Column (Takes up 4/12 of the space on large displays) #}
+        <div class="col-12 col-lg-4">
+          {{ announce::render(path="data/announcements.json") }}
+        </div>
+
+      </div>
+    {% else %}
+      {# Standard full-width fallback container for other non-announcement tabs #}
+      {% block content %}
+      {% endblock %}
+    {% endif %}
   </main>
   {% block scripts %}
   {% endblock %}
