@@ -4,8 +4,9 @@
   <div class="person-card">
     <div class="person-photo-col">
       {% if person.photo %}
-        <img src="img/people/{{ person.photo }}" alt="{{ person.name }}" class="person-img">
+        <img src="{{ get_url(path='img/people/' ~  person.photo) }}" alt="{{ person.name }}" class="person-img">
       {% else %}
+        <img src="{{ get_url(path='img/people/default.png') }}" alt="{{ person.name }}" class="person-img">
         <div class="person-img-placeholder"></div>
       {% endif %}
     </div>

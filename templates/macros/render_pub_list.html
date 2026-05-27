@@ -9,9 +9,9 @@
 
     <div class="pub-thumbnail-col">
       {% if pub.thumbnail %}
-      <img src="img/publications/{{ pub.thumbnail }}" alt="Cover for {{ pub.title }}" class="pub-thumb">
+      <img src="{{ get_url(path='img/publications/' ~ pub.thumbnail) }}" alt="Cover for {{ pub.title }}" class="pub-thumb">
       {% else %}
-      <img src="img/publications/default.png" alt="Cover for {{ pub.title }}" class="pub-thumb">
+      <img src="{{ get_url(path='img/publications/default.png') }}" alt="Cover for {{ pub.title }}" class="pub-thumb">
       {% endif %}
     </div>
 
