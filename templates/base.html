@@ -142,6 +142,17 @@
         {# Announcements Sidebar Column (Takes up 4/12 of the space on large displays) #}
         <div class="col-12 col-lg-4">
           {{ announce::render(path="data/announcements.json") }}
+
+    {% if config.extra.important_links %}
+    <div class="important-links">
+      <h4>Important links</h4>
+      <ul>
+        {% for link in config.extra.important_links %}
+          <li><a href="{{link.url}}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+    {% endif %}
         </div>
 
       </div>

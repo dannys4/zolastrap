@@ -17,6 +17,8 @@ institution_url = ""
 date_format = '%d/%m/%Y'
 favicon = ""
 
+important_links = []
+
 theme = 'default'
 bg = "dark"
 inverted = false
