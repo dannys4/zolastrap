@@ -2,6 +2,7 @@
 <html>
   <head>
     {% block head %}
+    <link rel="icon" type="image/x-icon" href="{{ get_url(path=config.extra.favicon) }}">
     <title>{% block title %}{{config.title}}{% endblock %}</title>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">

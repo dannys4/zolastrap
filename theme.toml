@@ -15,6 +15,7 @@ group_name = ""
 institution_name = ""
 institution_url = ""
 date_format = '%d/%m/%Y'
+favicon = ""
 
 theme = 'default'
 bg = "dark"
