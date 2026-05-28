@@ -16,6 +16,7 @@ institution_name = ""
 institution_url = ""
 date_format = '%d/%m/%Y'
 favicon = ""
+accessibility_link = ""
 
 important_links = []
 

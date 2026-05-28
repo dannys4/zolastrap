@@ -239,9 +239,15 @@
             </div>
           {% endfor %}
         </div>
+        {% if config.extra.accessibility_link %}
+        <div class="row fw-bold mb-1 d-flex text-center g-4 align-items-center justify-content-center">
+          <a href="{{config.extra.accessibility_link}}" target="_blank" rel="noopener" style="margin-top:5vh;"><!--
+          -->Accessibility</a>
+        </div>
+        {% endif %}
       </div>
-
-    </div> </div>
+    </div>
+  </div>
 </footer>
 {% endif %}
 </body>

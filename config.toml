@@ -12,6 +12,7 @@ build_search_index = true
 banner = "img/banner.jpeg"
 date_format = '%d/%m/%Y'
 group_name = ""
+accessibility_link = ""
 
 theme = 'simplex'
 bg = "dark"
