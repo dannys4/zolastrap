@@ -18,10 +18,10 @@
       <div class="card-body p-4">
 
         {# Course Meta Badge + Title #}
-        <div class="d-flex flex-wrap">{#
-          #}<span class="badge bg-secondary" style="font-size: 1rem;">{#
-          #}{% if code %}{{ code }}{% endif %} {{ title }}
-           </span>
+        <div class="d-flex flex-wrap bg-secondary text-wrap text-left" style="font-size: 1rem">
+          {# <span class="badge bg-secondary text-wrap text-left" style="font-size: 1rem;"> #}
+          <h5 style="font-weight: bold">{% if code %}{{ code }}{% endif %} {{ title }}</h5>
+           {# </span> #}
         </div>
 
         {# Term / Semester Meta #}
