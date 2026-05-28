@@ -492,14 +492,14 @@ footer .w-100 {
   object-fit: contain;
 
   /* Turns standard dark/colored logo PNGs into crisp, readable semi-transparent white marks */
-  filter: brightness(0.8) invert(0.25); /* Subtle gray/white tint for dark mode cohesion */
-  opacity: 0.75;
+  filter: brightness(1.0) invert(0.0); /* Subtle gray/white tint for dark mode cohesion */
+  opacity: 1.0;
   transition: all 0.25s ease-in-out;
 }
 
 /* Subtle mouse hover interactivity */
 .footer-logo:hover {
-  filter: brightness(90%) invert(10%); /* Sharp white pop on hover */
+  filter: brightness(100%) invert(0%); /* Sharp white pop on hover */
   opacity: 1;
   transform: scale(1.03);
 }
