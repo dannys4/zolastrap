@@ -55,8 +55,12 @@
   <div class="w-100">
     <img src="{{get_url(path=config.extra.banner)}}" alt="Banner" class="w-100-img" />
     <h1><a href="{{config.base_url}}"><span class="group-name-overlay">{{config.extra.group_name}}</span></a></h1>
-    <h2><a href="{{config.extra.institution_url}}"><span
-          class="institution-name-overlay">{{config.extra.institution_name}}</span></a></h2>
+
+    <h2 class="institution-title">
+      <a href="{{config.extra.institution_url}}">
+        <span class="institution-name-overlay">{{config.extra.institution_name}}</span>
+      </a>
+    </h2>
   </div>
   {% endif %}
   {% if config.extra.inverted and config.extra.bg == 'light' %}
@@ -143,16 +147,16 @@
         <div class="col-12 col-lg-4">
           {{ announce::render(path="data/announcements.json") }}
 
-    {% if config.extra.important_links %}
-    <div class="important-links">
-      <h4>Important links</h4>
-      <ul>
-        {% for link in config.extra.important_links %}
-          <li><a href="{{link.url}}">{{ link.title }}</a></li>
-        {% endfor %}
-      </ol>
-    </div>
-    {% endif %}
+          {% if config.extra.important_links %}
+          <div class="important-links">
+            <h4>Important links</h4>
+            <ul>
+              {% for link in config.extra.important_links %}
+                <li><a href="{{link.url}}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ol>
+          </div>
+          {% endif %}
         </div>
 
       </div>

@@ -23,11 +23,11 @@
 .pub-thumbnail-col { display: flex; justify-content: center; }
 .pub-thumb { width: 100%; height: auto; max-height: 110px; object-fit: contain; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
 .pub-content-col { display: flex; flex-direction: column; line-height: 1.45; }
-.pub-authors { margin: 0 0 4px 0; font-size: 1.05rem; color: #333; }
-.pub-title { margin: 0 0 4px 0; font-size: 1.15rem; font-weight: 700; font-style: italic; color: #a33b23; }
+.pub-authors { margin: 0 0 4px 0; font-size: 0.95rem; color: #333; }
+.pub-title { margin: 0 0 4px 0; font-size: 1.0rem; font-weight: 700; font-style: italic; color: #a33b23; }
 .pub-title a { color: inherit; text-decoration: none; }
 .pub-title a:hover { text-decoration: underline; }
-.pub-citation { margin: 0; font-size: 1.05rem; color: #333; }
+.pub-citation { margin: 0; font-size: 0.95rem; color: #333; }
 
 /* Right Column: Actions stacked layout vertically */
 .pub-actions-col {
@@ -145,6 +145,13 @@
   position: relative;
 }
 
+/* Hide the institution name when the window height is 500px or less */
+@media (max-height: 500px) {
+  .institution-title {
+    display: none;
+  }
+}
+
 footer .w-100 {
   max-height: none;
   height: auto;
@@ -153,7 +160,8 @@ footer .w-100 {
 .navbar-vert {
   position: relative;
   max-height: min(7vh, 70px);
-  z-index: 9999 !important
+  z-index: 9999 !important;
+  min-height: 70px;
 }
 
 /* Desktop Alignment Match (Screens 992px and wider) */
@@ -161,6 +169,10 @@ footer .w-100 {
   /* 1. Force the navbar container's inner content block to start exactly at the 5% line */
   .navbar-vert .container-fluid {
     padding-left: 5% !important;
+  }
+  .navbar-vert {
+    min-height: 50px;
+    max-height:  min(7vh, 60px);
   }
 
   /* 2. Remove the default left padding from the very first navigation link.
@@ -243,8 +255,8 @@ footer .w-100 {
 .tab-btn {
   background: none;
   border: none;
-  padding: 10px 16px;
-  font-size: 0.9rem;
+  padding: 8px 8px;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #666;
   cursor: pointer;
@@ -501,7 +513,7 @@ footer .w-100 {
 .footer-logo:hover {
   filter: brightness(100%) invert(0%); /* Sharp white pop on hover */
   opacity: 1;
-  transform: scale(1.03);
+  transform: scale(1.1);
 }
 
 /* Clean text hover state decoration rules */
@@ -538,4 +550,12 @@ footer .w-100 {
 
 .contact-link {
   text-decoration-color: #efefef;
+}
+
+.announcement-text {
+  font-size: 0.9rem
+}
+
+.announcement-date{
+   font-size: 0.85rem;
 }

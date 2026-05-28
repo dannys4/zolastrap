@@ -1,8 +1,8 @@
 {% macro render(path) %}
 <aside class="p-4 bg-light border rounded-3 shadow-sm">
-<h3 class="h4 fw-bold pb-2 mb-3 border-bottom border-2 text-dark">
+<h5 class="fw-bold pb-2 mb-3 border-bottom border-2 text-dark">
     Announcements
-</h3>
+</h5>
 
 {% set announcements = load_data(path=path) %}
 {% set total_announcements = announcements | length %}
@@ -13,10 +13,10 @@
 {% for announcement in announcements %}
     {% if loop.index <= 7 %}
     <div class="announcement-card pb-3 {% if not loop.last and loop.index < 7 %}border-bottom border-light-subtle{% elif loop.index == 7 and total_announcements > 7 %}border-bottom border-light-subtle{% endif %}">
-        <div class="text-secondary mb-1 fw-medium" style="font-size: 0.85rem;">
+        <div class="announcement-date text-secondary mb-1 fw-medium">
         {{ announcement.date }}
         </div>
-        <div class="announcement-text text-dark lh-sm" style="font-size: 0.95rem;">
+        <div class="announcement-text text-dark lh-sm">
         {{ announcement.content | safe }}
         </div>
     </div>
