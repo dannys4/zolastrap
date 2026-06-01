@@ -54,7 +54,7 @@
   {% if config.extra.banner %}
   <div class="w-100">
     <img src="{{get_url(path=config.extra.banner)}}" alt="Banner" class="w-100-img" />
-    <h1><a href="{{config.base_url}}"><span class="group-name-overlay">{{config.extra.group_name}}</span></a></h1>
+    <h1><a href="{{get_url(path="/")}}"><span class="group-name-overlay">{{config.extra.group_name}}</span></a></h1>
 
     <h2 class="institution-title">
       <a href="{{config.extra.institution_url}}">
@@ -87,8 +87,7 @@
           <ul class="navbar-nav me-auto">
             {% for link in config.extra.links %}
             <li class="nav-item">
-              <a class="nav-link" href="{% if not link.url is containing(" ://") %}{{config.base_url}}{% endif
-                %}/{{link.url}}">{{link.title}}</a>
+              <a class="nav-link" href="{{get_url(path=link.url)}}">{{link.title}}</a>
             </li>
             {% endfor %}
             {% if config.extra.themes %}
