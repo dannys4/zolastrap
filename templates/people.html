@@ -48,6 +48,7 @@
   {% set pi_list = [] %}
   {% set postdocs = [] %}
   {% set phd_students = [] %}
+  {% set memoriam = [] %}
   {% set alumni_scientists = [] %}
   {% set alumni_students = [] %}
   {% set alumni_postdocs = [] %}
@@ -62,6 +63,8 @@
       {% set_global postdocs = postdocs | concat(with=person) %}
     {% elif person.type == "phd" %}
       {% set_global phd_students = phd_students | concat(with=person) %}
+    {% elif person.type == "memoriam" %}
+      {% set_global memoriam = memoriam | concat(with=person) %}
     {% elif person.type == "research-scientist-alumn" %}
       {% set_global alumni_scientists = alumni_scientists | concat(with=person) %}
     {% elif person.type == "postdoc-alumn" %}
@@ -104,6 +107,17 @@
       <h2 class="section-title">Graduate Students, PhD</h2>
       <div class="people-grid">
         {% for person in phd_students %}
+          {{ self::render_person_card(person=person) }}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if memoriam | length > 0 %}
+    <section class="people-section">
+      <h2 class="section-title">In Memoriam</h2>
+      <div class="mem-grid">
+        {% for person in memoriam %}
           {{ self::render_person_card(person=person) }}
         {% endfor %}
       </div>
