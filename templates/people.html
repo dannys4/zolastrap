@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% macro render_person_card(person) %}
+{% macro render_person_card(person,section="") %}
   <div class="person-card">
     <div class="person-photo-col">
       {% if person.photo %}
@@ -12,13 +12,22 @@
     </div>
     <div class="person-info-col">
       <h3 class="person-name">
-        {{ person.name }}
-
-        {% if person.www and person.www != "" %}
-          <a href="{{ person.www }}" class="person-link" target="_blank" rel="noopener">WWW</a>
+        {% if section == "memoriam" %}
+          {% if person.www and person.www != "" %}
+            <a href="{{ person.www }}" class="memoriam-link" target="_blank" rel="noopener">{{ person.name  }}</a>
+          {% else %}
+            {{ person.name }}
+          {% endif %}
+        {% else %}
+          {{ person.name }}
         {% endif %}
-        {% if person.cv and person.cv != "" %}
-          <a href="{{ person.cv }}" class="person-link" target="_blank" rel="noopener">CV</a>
+        {% if section != "memoriam" %}
+          {% if person.www and person.www != "" %}
+            <a href="{{ person.www }}" class="person-link" target="_blank" rel="noopener">WWW</a>
+          {% endif %}
+          {% if person.cv and person.cv != "" %}
+            <a href="{{ person.cv }}" class="person-link" target="_blank" rel="noopener">CV</a>
+          {% endif %}
         {% endif %}
       </h3>
       <p class="person-bio">{{ person.bio }}</p>
@@ -118,7 +127,7 @@
       <h2 class="section-title">In Memoriam</h2>
       <div class="mem-grid">
         {% for person in memoriam %}
-          {{ self::render_person_card(person=person) }}
+          {{ self::render_person_card(person=person,section="memoriam") }}
         {% endfor %}
       </div>
     </section>
