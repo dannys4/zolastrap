@@ -40,7 +40,7 @@
 
 {% macro render_alumni_list(alumni_list, alumni_type) %}
 {% if alumni_list | length > 0 %}
-  <h3>{{ alumni_type }}</h3>
+  <h3 class="alumni-section-title">{{ alumni_type }}</h3>
   <ul class="alumni-text-list">
     {% for person in alumni_list %}
       <li>{% if person.www and person.www != "" %}<!--
@@ -178,8 +178,8 @@
 
       <div class="alumni-column">
         {% if alumni_students | length > 0 %}
-          <h3>PhD Students</h3>
-          <ul class="alumni-details-list">
+          <h3 class="alumni-section-title">PhD Students</h3>
+          <ul class="alumni-details-list" style="margin-bottom:2vh">
             {% for person in alumni_students %}
               <li>
                 <div class="alumni-lead">
