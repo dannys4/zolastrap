@@ -1,3 +1,66 @@
+{% macro get_recent_publications(n,only_featured=false) %}
+  {% set data = load_data(path="data/publications.json") %}
+  {% set sorted_publications = data | sort(attribute="order") | reverse %}
+  {% set recent_publications = [] %}
+  {% for pub in sorted_publications %}
+    {% if n != 0 %}
+      {% if recent_publications | length >= n %}{% break %}{% endif %}
+    {% endif %}
+    {% if not pub.hidden or pub.hidden not in ["yes", "true"] %}
+      {% if not only_featured %}
+        {% set_global recent_publications = recent_publications | concat(with=pub) %}
+      {% elif pub.featured and pub.featured in ["yes", "true"] %}
+        {% set_global recent_publications = recent_publications | concat(with=pub) %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  {{ recent_publications | json_encode | safe }}
+{% endmacro get_recent_publications %}
+
+{% macro structured_pub_data(n) %}
+
+{% set recent_publications = load_data(literal=self::get_recent_publications(n=3),format="json") %}
+
+<script type="application/ld-json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Recent Academic Publications",
+  "description": "A list of the three most recent research publications.",
+  "numberOfItems": {{ recent_pubs | length }},
+  "itemListElement": [
+    {% for pub in recent_pubs %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": {{ pub.title | json_encode | safe }},
+        "url": {{ pub.url | json_encode | safe }},
+        "description": {{ pub.abstract | truncate(length=200) | json_encode | safe }},
+        "author": [
+          {% if pub.authors is iterable and pub.authors is not string %}
+            {% for author in pub.authors %}
+            {
+              "@type": "Person",
+              "name": {{ author | json_encode | safe }}
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+          {% else %}
+            {
+              "@type": "Person",
+              "name": {{ pub.authors | json_encode | safe }}
+            }
+          {% endif %}
+        ]
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+{% endmacro structured_pub_data %}
 
 {% macro article_html(pub) %}
   {% if pub.author %}

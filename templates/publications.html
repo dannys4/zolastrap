@@ -1,24 +1,16 @@
 {% extends "base.html" %}
-
-{% import "macros/render_pub_list.html" as pub_macros %}
+{% import "macros/pub_macros.html" as pub_macros %}
 
 {% block content %}
 <main class="publications-container">
-  {% set data = load_data(path="data/publications.json") %}
-  {% set sorted_publications = data | sort(attribute="order") | reverse %}
-  {% set visible_all = [] %}
-  {% for pub in sorted_publications %}
-    {% if not pub.hidden or pub.hidden not in ["yes", "true"] %}
-      {% set_global visible_all = visible_all | concat(with=pub) %}
-    {% endif %}
-  {% endfor %}
+  {% set recent_publications = load_data(literal=pub_macros::get_recent_publications(n=0), format="json") %}
 
   {% set category_journals = [] %}
   {% set category_preprints = [] %}
   {% set category_conferences = [] %}
   {% set category_books_other = [] %}
 
-  {% for pub in visible_all %}
+  {% for pub in recent_publications %}
     {% set is_preprint = false %}
     {% if pub.publication_type == "article" and pub.journal and pub.journal is string and pub.journal is matching("[Pp]reprint") %}
       {% set is_preprint = true %}

@@ -1,24 +1,16 @@
+{% import "macros/pub_macros.html" as pub_macros %}
+
 {% extends "base.html" %}
-{% import "macros/render_pub_list.html" as pub_macros %}
+
 {% block content %}
 <div style="margin-top:10px"></div>
   {{section.content | safe}}
 
 <section class="featured-publications">
     <h2>Featured publications</h2>
-    {% set data = load_data(path="data/publications.json") %}
-    {% set sorted_publications = data | sort(attribute="order") | reverse %}
-
-    {% set featured_pubs = [] %}
-    {% for pub in sorted_publications %}
-      {% if pub.hidden and pub.hidden != "true" %}{% continue %}{% endif %}
-      {% if pub.featured and pub.featured == "yes" %}
-        {% set_global featured_pubs = featured_pubs | concat(with=pub) %}
-      {% endif %}
-    {% endfor %}
-
+    {% set recent_publications = load_data(literal=pub_macros::get_recent_publications(n=3,only_featured=true),format="json") %}
     <div class="featured-list-wrapper">
-      {{ pub_macros::render_list(items=featured_pubs, pubtype="article") }}
+      {{ pub_macros::render_list(items=recent_publications, pubtype="article") }}
     </div>
 
   </section>
