@@ -1,0 +1,47 @@
+{% import "macros/pub_macros.html" as pub_macros %}
+
+{% macro structured_pub_data(n) %}
+{% set raw_json = pub_macros::get_recent_publications(n=n) %}
+{% set recent_pubs = load_data(literal=raw_json,format="json") %}
+
+<script type="application/ld-json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Recent Academic Publications",
+  "description": "A list of the three most recent research publications.",
+  "numberOfItems": {{ recent_pubs | length }},
+  "itemListElement": [
+    {% for pub in recent_pubs %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": {{ pub.title | json_encode | safe }},
+        {% if pub.fulltext_urls %}"url": {{ pub.fulltext_urls[0] | json_encode | safe }},{% endif %}
+        {% if pub.abstract %}"description": {{ pub.abstract | truncate(length=200) | json_encode | safe }},{%endif%}
+        "author": [
+          {% if pub.author %}
+           {% if pub.author is not string %}
+            {% for author in pub.author %}
+            {
+              "@type": "Person",
+              "name": {{ author | json_encode | safe }}
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+          {% else %}
+            {
+              "@type": "Person",
+              "name": {{ pub.author | json_encode | safe }}
+            }
+          {% endif %}{% endif %}
+        ]
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+{% endmacro structured_pub_data %}
