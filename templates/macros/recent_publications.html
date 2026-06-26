@@ -4,7 +4,7 @@
 {% set raw_json = pub_macros::get_recent_publications(n=n) %}
 {% set recent_pubs = load_data(literal=raw_json,format="json") %}
 
-<script type="application/ld-json">
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "ItemList",
