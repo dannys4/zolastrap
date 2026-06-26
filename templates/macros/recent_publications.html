@@ -18,9 +18,9 @@
       "position": {{ loop.index }},
       "item": {
         "@type": "ScholarlyArticle",
-        "headline": {{ pub.title | json_encode | safe }},
-        {% if pub.fulltext_urls %}"url": {{ pub.fulltext_urls[0] | json_encode | safe }},{% endif %}
-        {% if pub.abstract %}"description": {{ pub.abstract | truncate(length=200) | json_encode | safe }},{%endif%}
+        "headline": {{ pub.title | json_encode | safe }},{% if pub.fulltext_urls %}
+        "url": {{ pub.fulltext_urls[0] | json_encode | safe }},{% endif %}{% if pub.abstract %}
+        "description": {{ pub.abstract | truncate(length=200) | json_encode | safe }},{%endif%}
         "author": [
           {% if pub.author %}
            {% if pub.author is not string %}
