@@ -1,5 +1,5 @@
 {% import "macros/announcements.html" as announce %}
-{% import "macros/pub_macros.html" as pub_macros %}
+{% import "macros/recent_publications.html" as recent_pub_macros %}
 
 <!DOCTYPE html>
 <html>
@@ -50,7 +50,7 @@
   <script src="{{get_url(path=" js/search.js")}}"></script>
   {% endif %}
   {% endblock %}
-  {# {{ pub_macros::structured_pub_data(n=3) }} #}
+  {{ recent_pub_macros::structured_pub_data(n=5) }}
 </head>
 
 <body class="d-flex flex-column min-vh-100">
